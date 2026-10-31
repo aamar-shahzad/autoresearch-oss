@@ -1,0 +1,112 @@
+{
+ "description": "Customer support: route a ticket to the right queue. Free-text inputs -> LLM backend (LoRA/QLoRA).",
+ "config": {
+  "workflow": {
+   "name": "support-triage",
+   "description": "Route the support ticket to the correct queue.",
+   "inputs": [
+    "subject",
+    "body",
+    "customer_tier"
+   ],
+   "outcome_fields": [
+    "outcome_success",
+    "resolution_hours"
+   ],
+   "action_space": [
+    "billing",
+    "bug",
+    "how_to",
+    "account_access",
+    "escalate_human"
+   ],
+   "unsafe_actions": [],
+   "costly_actions": [
+    "escalate_human"
+   ],
+   "slice_by": "product_area",
+   "slice_values": [],
+   "group_by": "customer_id",
+   "prompt_template": "Subject: {subject}\nTier: {customer_tier}\nBody: {body}",
+   "thresholds": {
+    "fix_rate": [
+     ">=",
+     0.9
+    ],
+    "unsafe_rate": [
+     "<=",
+     0.0
+    ],
+    "worst_slice": [
+     ">=",
+     0.8
+    ],
+    "uncovered_slices": [
+     "<=",
+     0
+    ]
+   }
+  },
+  "data": {
+   "path": "data/episodes.csv"
+  },
+  "outcome": {
+   "type": "replay",
+   "k": 15
+  },
+  "synth": {
+   "type": "resample"
+  },
+  "backend": {
+   "type": "llm",
+   "model": {
+    "id": "Qwen/Qwen3-1.7B"
+   },
+   "mode": "auto",
+   "seq_len": 1024,
+   "batch_size": 4
+  },
+  "techniques": [
+   "sft",
+   "dpo"
+  ],
+  "budget": {
+   "max_compute": 600,
+   "max_rounds": 3
+  },
+  "unit_cost_usd": 0.03,
+  "_note": "replay scoring is a poor fit for text; supply a verifier or labelled eval set via outcome.type='twin' when you can."
+ },
+ "columns": {
+  "episode_id": "unique id",
+  "customer_id": "splits never share one",
+  "subject": "ticket subject",
+  "body": "ticket body",
+  "customer_tier": "plan",
+  "action": "queue the ticket ended up in",
+  "outcome_success": "true if no re-route/reopen",
+  "product_area": "slice column"
+ },
+ "example_rows": [
+  {
+   "episode_id": "t1",
+   "customer_id": "c1",
+   "subject": "Charged twice",
+   "body": "I see two charges this month.",
+   "customer_tier": "pro",
+   "action": "billing",
+   "outcome_success": true,
+   "product_area": "payments"
+  },
+  {
+   "episode_id": "t2",
+   "customer_id": "c2",
+   "subject": "Can't log in",
+   "body": "Password reset email never arrives.",
+   "customer_tier": "free",
+   "action": "account_access",
+   "outcome_success": true,
+   "product_area": "auth"
+  }
+ ]
+}

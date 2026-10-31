@@ -1,0 +1,10 @@
+[project]
+name = "mycorp-autoresearch"
+version = "0.1.0"
+dependencies = ["autoresearch-oss"]
+
+[project.entry-points."autoresearch_oss.plugins"]
+mycorp = "mycorp_autoresearch"
+
+[tool.setuptools]
+packages = ["mycorp_autoresearch"]

@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autoresearch-oss"
+version = "0.2.0"
+description = "Open-source fine-tuning workbench: detect hardware, pick an open model that fits, search recipes, gate, serve, learn from production"
+requires-python = ">=3.10"
+dependencies = ["numpy", "pandas", "scikit-learn", "joblib", "tabulate"]
+
+[project.optional-dependencies]
+llm = ["torch", "transformers", "datasets", "peft", "trl"]
+parquet = ["pyarrow"]
+sql = ["sqlalchemy"]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["autoresearch_oss*"]
+
+[project.scripts]
+autoresearch = "autoresearch_oss.cli:main"
+
+[tool.setuptools.package-data]
+autoresearch_oss = ["models/catalog.json", "templates/*.json"]

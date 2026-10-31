@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.venv/
+.vscode/
+registry.db
+*.db
+artifacts/
+published/
+llm_runs/
+live.jsonl
+*.joblib
+myproj/
+examples/maintenance_use_case/

@@ -1,0 +1,602 @@
+{
+ "snapshot": "2026-10",
+ "note": "Curated snapshot from the maintainers' knowledge; sizes are approximate and the list WILL go stale. `autoresearch models info <repo>` and `models search` read live Hub metadata; license/gating are re-checked at download.",
+ "models": [
+  {
+   "id": "Qwen/Qwen3-0.6B",
+   "family": "Qwen3",
+   "params_b": 0.6,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "small",
+    "reasoning"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "Qwen/Qwen3-1.7B",
+   "family": "Qwen3",
+   "params_b": 1.7,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "small",
+    "reasoning"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "Qwen/Qwen3-4B",
+   "family": "Qwen3",
+   "params_b": 4.0,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "reasoning"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "Qwen/Qwen3-8B",
+   "family": "Qwen3",
+   "params_b": 8.2,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "reasoning"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "Qwen/Qwen3-14B",
+   "family": "Qwen3",
+   "params_b": 14.8,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "reasoning"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "Qwen/Qwen3-32B",
+   "family": "Qwen3",
+   "params_b": 32.8,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "reasoning"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "Qwen/Qwen2.5-0.5B-Instruct",
+   "family": "Qwen2.5",
+   "params_b": 0.5,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "small",
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "Qwen/Qwen2.5-1.5B-Instruct",
+   "family": "Qwen2.5",
+   "params_b": 1.5,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "small",
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "Qwen/Qwen2.5-3B-Instruct",
+   "family": "Qwen2.5",
+   "params_b": 3.1,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "qwen-research",
+   "license_class": "research",
+   "gated": false,
+   "tags": [
+    "instruct"
+   ],
+   "notes": "Research license: not for commercial use."
+  },
+  {
+   "id": "Qwen/Qwen2.5-7B-Instruct",
+   "family": "Qwen2.5",
+   "params_b": 7.6,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "Qwen/Qwen2.5-14B-Instruct",
+   "family": "Qwen2.5",
+   "params_b": 14.7,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "Qwen/Qwen2.5-32B-Instruct",
+   "family": "Qwen2.5",
+   "params_b": 32.5,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "meta-llama/Llama-3.2-1B-Instruct",
+   "family": "Llama 3.2",
+   "params_b": 1.2,
+   "active_params_b": null,
+   "vocab": 128256,
+   "license_id": "llama3.2",
+   "license_class": "custom",
+   "gated": true,
+   "tags": [
+    "small",
+    "instruct"
+   ],
+   "notes": "Llama community license; accept terms on the Hub."
+  },
+  {
+   "id": "meta-llama/Llama-3.2-3B-Instruct",
+   "family": "Llama 3.2",
+   "params_b": 3.2,
+   "active_params_b": null,
+   "vocab": 128256,
+   "license_id": "llama3.2",
+   "license_class": "custom",
+   "gated": true,
+   "tags": [
+    "instruct"
+   ],
+   "notes": "Llama community license; accept terms on the Hub."
+  },
+  {
+   "id": "meta-llama/Llama-3.1-8B-Instruct",
+   "family": "Llama 3.1",
+   "params_b": 8.0,
+   "active_params_b": null,
+   "vocab": 128256,
+   "license_id": "llama3.1",
+   "license_class": "custom",
+   "gated": true,
+   "tags": [
+    "instruct"
+   ],
+   "notes": "Llama community license; accept terms on the Hub."
+  },
+  {
+   "id": "google/gemma-2-2b-it",
+   "family": "Gemma 2",
+   "params_b": 2.6,
+   "active_params_b": null,
+   "vocab": 256000,
+   "license_id": "gemma",
+   "license_class": "custom",
+   "gated": true,
+   "tags": [
+    "small",
+    "instruct"
+   ],
+   "notes": "Gemma terms of use; accept on the Hub."
+  },
+  {
+   "id": "google/gemma-2-9b-it",
+   "family": "Gemma 2",
+   "params_b": 9.2,
+   "active_params_b": null,
+   "vocab": 256000,
+   "license_id": "gemma",
+   "license_class": "custom",
+   "gated": true,
+   "tags": [
+    "instruct"
+   ],
+   "notes": "Gemma terms of use; accept on the Hub."
+  },
+  {
+   "id": "google/gemma-3-1b-it",
+   "family": "Gemma 3",
+   "params_b": 1.0,
+   "active_params_b": null,
+   "vocab": 262144,
+   "license_id": "gemma",
+   "license_class": "custom",
+   "gated": true,
+   "tags": [
+    "small",
+    "instruct"
+   ],
+   "notes": "Gemma terms of use; accept on the Hub."
+  },
+  {
+   "id": "google/gemma-3-4b-it",
+   "family": "Gemma 3",
+   "params_b": 4.3,
+   "active_params_b": null,
+   "vocab": 262144,
+   "license_id": "gemma",
+   "license_class": "custom",
+   "gated": true,
+   "tags": [
+    "instruct",
+    "multimodal"
+   ],
+   "notes": "Multimodal checkpoint; text-only fine-tuning needs care."
+  },
+  {
+   "id": "google/gemma-3-12b-it",
+   "family": "Gemma 3",
+   "params_b": 12.2,
+   "active_params_b": null,
+   "vocab": 262144,
+   "license_id": "gemma",
+   "license_class": "custom",
+   "gated": true,
+   "tags": [
+    "instruct",
+    "multimodal"
+   ],
+   "notes": "Multimodal checkpoint; text-only fine-tuning needs care."
+  },
+  {
+   "id": "google/gemma-3-27b-it",
+   "family": "Gemma 3",
+   "params_b": 27.4,
+   "active_params_b": null,
+   "vocab": 262144,
+   "license_id": "gemma",
+   "license_class": "custom",
+   "gated": true,
+   "tags": [
+    "instruct",
+    "multimodal"
+   ],
+   "notes": "Multimodal checkpoint; text-only fine-tuning needs care."
+  },
+  {
+   "id": "microsoft/Phi-4-mini-instruct",
+   "family": "Phi-4",
+   "params_b": 3.8,
+   "active_params_b": null,
+   "vocab": 200064,
+   "license_id": "mit",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "instruct",
+    "reasoning"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "microsoft/Phi-3.5-mini-instruct",
+   "family": "Phi-3.5",
+   "params_b": 3.8,
+   "active_params_b": null,
+   "vocab": 32064,
+   "license_id": "mit",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "microsoft/phi-4",
+   "family": "Phi-4",
+   "params_b": 14.7,
+   "active_params_b": null,
+   "vocab": 100352,
+   "license_id": "mit",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "instruct",
+    "reasoning"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "mistralai/Mistral-7B-Instruct-v0.3",
+   "family": "Mistral",
+   "params_b": 7.2,
+   "active_params_b": null,
+   "vocab": 32768,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "mistralai/Mistral-Nemo-Instruct-2407",
+   "family": "Mistral",
+   "params_b": 12.2,
+   "active_params_b": null,
+   "vocab": 131072,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "mistralai/Mistral-Small-24B-Instruct-2501",
+   "family": "Mistral",
+   "params_b": 23.6,
+   "active_params_b": null,
+   "vocab": 131072,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "HuggingFaceTB/SmolLM2-135M-Instruct",
+   "family": "SmolLM2",
+   "params_b": 0.135,
+   "active_params_b": null,
+   "vocab": 49152,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "tiny",
+    "instruct"
+   ],
+   "notes": "Good for pipeline smoke tests."
+  },
+  {
+   "id": "HuggingFaceTB/SmolLM2-360M-Instruct",
+   "family": "SmolLM2",
+   "params_b": 0.36,
+   "active_params_b": null,
+   "vocab": 49152,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "tiny",
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+   "family": "SmolLM2",
+   "params_b": 1.7,
+   "active_params_b": null,
+   "vocab": 49152,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "small",
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "HuggingFaceTB/SmolLM3-3B",
+   "family": "SmolLM3",
+   "params_b": 3.1,
+   "active_params_b": null,
+   "vocab": 128256,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "reasoning"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "allenai/OLMo-2-1124-7B-Instruct",
+   "family": "OLMo 2",
+   "params_b": 7.3,
+   "active_params_b": null,
+   "vocab": 100278,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "instruct",
+    "fully-open"
+   ],
+   "notes": "Open data and training recipe."
+  },
+  {
+   "id": "allenai/OLMo-2-1124-13B-Instruct",
+   "family": "OLMo 2",
+   "params_b": 13.7,
+   "active_params_b": null,
+   "vocab": 100278,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "instruct",
+    "fully-open"
+   ],
+   "notes": "Open data and training recipe."
+  },
+  {
+   "id": "ibm-granite/granite-3.3-2b-instruct",
+   "family": "Granite 3.3",
+   "params_b": 2.5,
+   "active_params_b": null,
+   "vocab": 49155,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "small",
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "ibm-granite/granite-3.3-8b-instruct",
+   "family": "Granite 3.3",
+   "params_b": 8.2,
+   "active_params_b": null,
+   "vocab": 49155,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+   "family": "TinyLlama",
+   "params_b": 1.1,
+   "active_params_b": null,
+   "vocab": 32000,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "small",
+    "instruct"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+   "family": "DeepSeek-R1-Distill",
+   "params_b": 1.8,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "mit",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "small",
+    "reasoning"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+   "family": "DeepSeek-R1-Distill",
+   "params_b": 7.6,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "mit",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "reasoning"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+   "family": "DeepSeek-R1-Distill",
+   "params_b": 14.8,
+   "active_params_b": null,
+   "vocab": 151936,
+   "license_id": "mit",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "reasoning"
+   ],
+   "notes": ""
+  },
+  {
+   "id": "openai/gpt-oss-20b",
+   "family": "gpt-oss",
+   "params_b": 21.0,
+   "active_params_b": 3.6,
+   "vocab": 201088,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "reasoning",
+    "moe"
+   ],
+   "notes": "MoE: memory follows TOTAL params; shipped in MXFP4. Fine-tuning support is newer; check TRL/PEFT notes."
+  },
+  {
+   "id": "openai/gpt-oss-120b",
+   "family": "gpt-oss",
+   "params_b": 117.0,
+   "active_params_b": 5.1,
+   "vocab": 201088,
+   "license_id": "apache-2.0",
+   "license_class": "permissive",
+   "gated": false,
+   "tags": [
+    "reasoning",
+    "moe"
+   ],
+   "notes": "MoE: memory follows TOTAL params; multi-GPU / datacenter class."
+  }
+ ]
+}

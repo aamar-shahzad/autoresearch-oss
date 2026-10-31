@@ -1,0 +1,97 @@
+{
+ "workflow": {
+  "name": "cnc-spindle-overheat",
+  "description": "Recommend the action that clears a spindle-overheating alarm.",
+  "inputs": [
+   "alarm",
+   "flow",
+   "temp",
+   "ambient",
+   "vibration"
+  ],
+  "outcome_fields": [
+   "outcome_success"
+  ],
+  "action_space": [
+   "replace_filter",
+   "inspect_pump",
+   "replace_bearing",
+   "clean_fan",
+   "restart_no_check"
+  ],
+  "unsafe_actions": [
+   "restart_no_check"
+  ],
+  "slice_by": "fault_family",
+  "thresholds": {
+   "fix_rate": [
+    ">=",
+    0.85
+   ],
+   "unsafe_rate": [
+    "<=",
+    0.02
+   ],
+   "worst_slice": [
+    ">=",
+    0.7
+   ],
+   "uncovered_slices": [
+    "<=",
+    0
+   ]
+  },
+  "slice_values": [
+   "filter",
+   "pump",
+   "bearing",
+   "fan"
+  ],
+  "group_by": "asset",
+  "costly_actions": [
+   "replace_bearing",
+   "replace_filter"
+  ],
+  "task_type": "choice",
+  "prompt_template": "",
+  "unsafe_patterns": []
+ },
+ "data": {
+  "path": "/home/claude/autoresearch-oss/examples/episodes.csv"
+ },
+ "outcome": {
+  "type": "replay",
+  "k": 15
+ },
+ "synth": {
+  "type": "resample",
+  "noise": 0.05
+ },
+ "backend": {
+  "type": "tabular",
+  "bases": [
+   "hgb",
+   "rf"
+  ]
+ },
+ "budget": {
+  "max_compute": 900,
+  "max_rounds": 4
+ },
+ "unit_cost_usd": 0.02,
+ "export": {
+  "hash_cols": [
+   "asset"
+  ],
+  "round_numeric": {
+   "flow": 1,
+   "temp": 1
+  },
+  "salt": "change-me",
+  "quasi_identifiers": [
+   "site",
+   "alarm"
+  ],
+  "k": 5
+ }
+}

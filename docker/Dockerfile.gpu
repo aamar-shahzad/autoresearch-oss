@@ -1,0 +1,11 @@
+# UNTESTED reference image for GPU hosts. Build from a CUDA-enabled PyTorch base, then add the stack.
+FROM pytorch/pytorch:2.5.1-cuda12.4-cudnn9-runtime
+WORKDIR /app
+COPY pyproject.toml README.md LICENSE ./
+COPY autoresearch_oss ./autoresearch_oss
+RUN pip install --no-cache-dir -e ".[llm]"
+ENV AUTORESEARCH_MODELS=/models HF_HOME=/models/.hf
+VOLUME /models
+ENTRYPOINT ["autoresearch"]
+CMD ["doctor", "--probe"]
+# run: docker run --gpus all -v $PWD:/work -v models:/models -w /work <image> train --config autoresearch.json

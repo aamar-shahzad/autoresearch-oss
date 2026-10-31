@@ -1,0 +1,98 @@
+{
+ "description": "Document -> JSON extraction (invoices, forms, claims). Free-text generation scored by a verifier.",
+ "config": {
+  "workflow": {
+   "name": "invoice-extraction",
+   "description": "Extract invoice_number, total and currency from the document as JSON.",
+   "inputs": [
+    "document"
+   ],
+   "outcome_fields": [
+    "outcome_success"
+   ],
+   "action_space": [],
+   "unsafe_actions": [],
+   "task_type": "generation",
+   "slice_by": "doc_type",
+   "slice_values": [],
+   "group_by": "source",
+   "unsafe_patterns": [],
+   "thresholds": {
+    "fix_rate": [
+     ">=",
+     0.9
+    ],
+    "unsafe_rate": [
+     "<=",
+     0.0
+    ],
+    "worst_slice": [
+     ">=",
+     0.8
+    ],
+    "uncovered_slices": [
+     "<=",
+     0
+    ]
+   }
+  },
+  "data": {
+   "path": "data/episodes.csv"
+  },
+  "outcome": {
+   "type": "verifier",
+   "verifier": {
+    "type": "json_fields",
+    "required": [
+     "invoice_number",
+     "total",
+     "currency"
+    ],
+    "match": [
+     "invoice_number",
+     "total",
+     "currency"
+    ]
+   }
+  },
+  "synth": {
+   "type": "resample"
+  },
+  "backend": {
+   "type": "llm",
+   "model": {
+    "id": "Qwen/Qwen3-4B"
+   },
+   "mode": "auto",
+   "seq_len": 2048,
+   "batch_size": 2
+  },
+  "techniques": [
+   "sft",
+   "grpo"
+  ],
+  "budget": {
+   "max_compute": 900,
+   "max_rounds": 3
+  },
+  "unit_cost_usd": 0.03
+ },
+ "columns": {
+  "episode_id": "unique id",
+  "source": "vendor / origin (splits never share one)",
+  "document": "raw text",
+  "action": "the CORRECT JSON (reference answer)",
+  "outcome_success": "true when `action` is a verified-good answer",
+  "doc_type": "slice column"
+ },
+ "example_rows": [
+  {
+   "episode_id": "d1",
+   "source": "acme",
+   "document": "INVOICE #A-1001  Total due: 1,250.00 EUR",
+   "action": "{\"invoice_number\": \"A-1001\", \"total\": \"1250.00\", \"currency\": \"EUR\"}",
+   "outcome_success": true,
+   "doc_type": "invoice"
+  }
+ ]
+}
