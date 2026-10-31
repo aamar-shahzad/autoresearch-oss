@@ -8,7 +8,12 @@ a registry you own. Industry-agnostic: you bring episodes (situation + action + 
 
 Not Palantir's product; no Foundry.
 
+**What it is:** a [decision-model factory](docs/product-positioning.md) — search → gate → serve → learn, with registry lineage you own.  
+**What it is not:** a full ontology platform or an LLM chat/RAG host. Default backend is **tabular** (CPU-proven); **LLM** uses the same loop ([guide](docs/backends-tabular-vs-llm.md)).
+
 ```bash
+autoresearch about    # one-screen positioning summary
+
 git clone https://github.com/aamar-shahzad/autoresearch-oss.git && cd autoresearch-oss
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[llm]"                             # core only: pip install -e .
@@ -38,7 +43,7 @@ autoresearch quickstart                      # no data/GPU? tour on built-in SAM
 | **Extensibility** | plugin registry + entry points for connectors, outcomes, verifiers, synthesizers, backends, hubs                                                                                                                                                                         |
 | **Templates**     | maintenance diagnostics, support triage, structured extraction                                                                                                                                                                                                           |
 
-Docs: [hardware & models](docs/hardware-and-models.md) · [data format](docs/data-format.md) · [extending](docs/extending.md) · [operations](docs/operations.md) · [industries](docs/industries.md) · [architecture](docs/architecture.md) · [**maintenance use case**](docs/use-case-maintenance-diagnostics.md) (`make use-case`)
+Docs: [product positioning](docs/product-positioning.md) · [ontology-lite](docs/ontology-lite.md) · [tabular vs LLM](docs/backends-tabular-vs-llm.md) · [hardware & models](docs/hardware-and-models.md) · [data format](docs/data-format.md) · [extending](docs/extending.md) · [operations](docs/operations.md) · [industries](docs/industries.md) · [architecture](docs/architecture.md) · [platform API](docs/api.md) · [enterprise features](docs/enterprise-features.md) · [platform roadmap](docs/platform-roadmap.md) · [maintenance use case](docs/use-case-maintenance-diagnostics.md) (`make use-case`)
 
 ## Honest status - what has and hasn't been verified
 

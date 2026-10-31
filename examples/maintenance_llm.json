@@ -1,0 +1,39 @@
+{
+  "workflow": {
+    "name": "maintenance-diagnostics",
+    "description": "Recommend the repair action that clears the alarm.",
+    "inputs": ["alarm", "flow", "temp", "ambient", "vibration"],
+    "outcome_fields": ["outcome_success"],
+    "action_space": [
+      "replace_filter",
+      "inspect_pump",
+      "replace_bearing",
+      "clean_fan",
+      "restart_no_check"
+    ],
+    "unsafe_actions": ["restart_no_check"],
+    "costly_actions": ["replace_filter", "replace_bearing"],
+    "slice_by": "fault_family",
+    "slice_values": ["filter", "pump", "bearing", "fan"],
+    "group_by": "asset",
+    "thresholds": {
+      "fix_rate": [">=", 0.9],
+      "unsafe_rate": ["<=", 0.01],
+      "worst_slice": [">=", 0.8],
+      "uncovered_slices": ["<=", 0]
+    },
+    "prompt_template": "Alarm {alarm}, flow={flow}, temp={temp}, ambient={ambient}, vibration={vibration}. Choose one repair action."
+  },
+  "data": { "path": "data/episodes.csv" },
+  "outcome": { "type": "replay", "k": 15 },
+  "synth": { "type": "resample" },
+  "backend": {
+    "type": "llm",
+    "model": { "id": "HuggingFaceTB/SmolLM2-135M-Instruct" },
+    "seq_len": 512,
+    "batch_size": 1
+  },
+  "budget": { "max_compute": 900, "max_rounds": 3 },
+  "unit_cost_usd": 0.02,
+  "_comment": "Same loop as tabular maintenance; needs pip install -e '.[llm]' and GPU for train. Tabular template remains default."
+}

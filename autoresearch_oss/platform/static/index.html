@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>autoresearch platform</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>autoresearch platform</h1>
+    <p class="sub">Decision-model factory · not a chat host · tabular default · optional LLM loop</p>
+  </header>
+
+  <section class="panel about">
+    <h2>What this is</h2>
+    <p class="hint">Workflow search → promote → serve (predict + feedback) → monitor → retrain. Ontology-lite only (<code>entity_links</code>, Case sync). See <code>autoresearch about</code> and <code>docs/product-positioning.md</code>.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Workspace</h2>
+    <label>Workflow <input id="workflow" placeholder="maintenance-diagnostics" /></label>
+    <label>Config path <input id="configPath" placeholder="/path/to/autoresearch.json" size="48" /></label>
+    <label>Tenant <input id="tenantId" value="default" size="16" /></label>
+    <label>API bearer (RBAC) <input id="apiBearer" type="password" placeholder="optional" size="24" /></label>
+    <label>Live CSV (monitor) <input id="livePath" placeholder="/path/to/live.csv" size="48" /></label>
+    <button id="btnRefresh">Refresh registry</button>
+  </section>
+
+  <section class="panel">
+    <h2>Project actions</h2>
+    <div class="row">
+      <button id="btnDoctor">Doctor (hardware)</button>
+      <button id="btnValidate">Validate data</button>
+      <button id="btnEntitySync">Entity sync (+ Case)</button>
+      <button id="btnEvalRun">Run eval (holdout)</button>
+    </div>
+    <div class="row">
+      <label>Entity types <input id="matTypes" value="Case" size="24" /></label>
+      <button id="btnMaterialize">Materialize episodes → CSV</button>
+      <button id="btnStudy">Study: propose recipes</button>
+      <label><input type="checkbox" id="studyLlm" /> use SmolLM2-135M</label>
+    </div>
+    <div class="row">
+      <label>Schedule action
+        <select id="schedAction"><option>validate</option><option>train</option><option>monitor</option></select>
+      </label>
+      <label>every <input id="schedInterval" value="6h" size="8" /></label>
+      <button id="btnSchedule">Add schedule</button>
+      <button id="btnAudit">View audit log</button>
+    </div>
+    <div class="row">
+      <label>Train out dir <input id="trainOut" value="artifacts" size="20" /></label>
+      <label><input type="checkbox" id="trainPromote" /> promote if gate passes</label>
+      <button id="btnTrain">Start train</button>
+    </div>
+    <div class="row">
+      <label>Export name <input id="exportName" placeholder="dataset-v1" size="24" /></label>
+      <button id="btnExport">Export dataset</button>
+    </div>
+    <div class="row">
+      <label>Init template <select id="initTemplate"></select></label>
+      <label>Init path <input id="initPath" placeholder="./myproj" size="32" /></label>
+      <button id="btnInit">Init project</button>
+    </div>
+    <pre id="actionsOut">—</pre>
+    <pre id="trainJob" class="muted">—</pre>
+  </section>
+
+  <section class="panel">
+    <h2>Predict &amp; feedback</h2>
+    <p class="hint">Uses production model for workflow + config above. Logs to platform_live.jsonl next to registry DB.</p>
+    <div class="grid-predict">
+      <label>alarm <input id="inAlarm" type="number" step="any" value="1" /></label>
+      <label>flow <input id="inFlow" type="number" step="any" value="12" /></label>
+      <label>temp <input id="inTemp" type="number" step="any" value="78" /></label>
+      <label>ambient <input id="inAmbient" type="number" step="any" value="22" /></label>
+      <label>vibration <input id="inVibration" type="number" step="any" value="0.4" /></label>
+    </div>
+    <button id="btnPredict">Predict</button>
+    <pre id="predictOut">—</pre>
+    <div class="row">
+      <label>request_id <input id="fbRequestId" size="36" /></label>
+      <label>final_action <input id="fbAction" placeholder="replace_filter" size="20" /></label>
+      <label><input type="checkbox" id="fbSuccess" checked /> outcome_success</label>
+      <label>slice <input id="fbSlice" placeholder="optional" size="16" /></label>
+      <button id="btnFeedback">Submit feedback</button>
+    </div>
+    <pre id="feedbackOut">—</pre>
+  </section>
+
+  <section class="panel">
+    <h2>Production model</h2>
+    <pre id="production">—</pre>
+    <button id="btnRollback" disabled>Rollback workflow</button>
+  </section>
+
+  <section class="panel">
+    <h2>Models</h2>
+    <table id="models"><thead><tr><th>id</th><th>stage</th><th>holdout fix</th><th>recipe</th><th></th></tr></thead><tbody></tbody></table>
+  </section>
+
+  <section class="panel">
+    <h2>Experiments</h2>
+    <table id="experiments"><thead><tr><th>id</th><th>phase</th><th>fix</th><th>worst slice</th><th>recipe</th></tr></thead><tbody></tbody></table>
+  </section>
+
+  <section class="panel">
+    <h2>Monitor</h2>
+    <button id="btnMonitor">Run monitor</button>
+    <pre id="monitorOut">—</pre>
+  </section>
+
+  <section class="panel">
+    <h2>Ontology</h2>
+    <button id="btnOntology">Export entity types &amp; entities</button>
+    <pre id="ontologyOut">—</pre>
+  </section>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

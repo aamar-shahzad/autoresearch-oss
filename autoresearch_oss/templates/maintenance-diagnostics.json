@@ -1,139 +1,133 @@
 {
- "description": "Industrial / fleet maintenance: recommend the repair action that clears an alarm. Numeric sensor inputs -> CPU-friendly tabular backend.",
- "config": {
-  "workflow": {
-   "name": "maintenance-diagnostics",
-   "description": "Recommend the repair action that clears the alarm.",
-   "inputs": [
-    "alarm",
-    "flow",
-    "temp",
-    "ambient",
-    "vibration"
-   ],
-   "outcome_fields": [
-    "outcome_success"
-   ],
-   "action_space": [
-    "replace_filter",
-    "inspect_pump",
-    "replace_bearing",
-    "clean_fan",
-    "restart_no_check"
-   ],
-   "unsafe_actions": [
-    "restart_no_check"
-   ],
-   "costly_actions": [
-    "replace_filter",
-    "replace_bearing"
-   ],
-   "slice_by": "fault_family",
-   "slice_values": [
-    "filter",
-    "pump",
-    "bearing",
-    "fan"
-   ],
-   "group_by": "asset",
-   "thresholds": {
-    "fix_rate": [
-     ">=",
-     0.9
-    ],
-    "unsafe_rate": [
-     "<=",
-     0.01
-    ],
-    "worst_slice": [
-     ">=",
-     0.8
-    ],
-    "uncovered_slices": [
-     "<=",
-     0
-    ]
-   }
+  "description": "Industrial / fleet maintenance: recommend the repair action that clears an alarm. Numeric sensor inputs -> CPU-friendly tabular backend.",
+  "config": {
+    "workflow": {
+      "name": "maintenance-diagnostics",
+      "description": "Recommend the repair action that clears the alarm.",
+      "inputs": ["alarm", "flow", "temp", "ambient", "vibration"],
+      "outcome_fields": ["outcome_success"],
+      "action_space": [
+        "replace_filter",
+        "inspect_pump",
+        "replace_bearing",
+        "clean_fan",
+        "restart_no_check"
+      ],
+      "unsafe_actions": ["restart_no_check"],
+      "costly_actions": ["replace_filter", "replace_bearing"],
+      "slice_by": "fault_family",
+      "slice_values": ["filter", "pump", "bearing", "fan"],
+      "group_by": "asset",
+      "thresholds": {
+        "fix_rate": [">=", 0.9],
+        "unsafe_rate": ["<=", 0.01],
+        "worst_slice": [">=", 0.8],
+        "uncovered_slices": ["<=", 0]
+      }
+    },
+    "data": {
+      "path": "data/episodes.csv"
+    },
+    "outcome": {
+      "type": "replay",
+      "k": 15
+    },
+    "synth": {
+      "type": "resample"
+    },
+    "backend": {
+      "type": "tabular"
+    },
+    "budget": {
+      "max_compute": 900,
+      "max_rounds": 4
+    },
+    "unit_cost_usd": 0.02,
+    "entity_links": {
+      "asset": { "type": "Asset" },
+      "site": { "type": "Site" }
+    },
+    "entity_episode_map": {
+      "fields": {
+        "episode_id": "episode_id",
+        "asset": "asset",
+        "alarm": "alarm",
+        "flow": "flow",
+        "temp": "temp",
+        "ambient": "ambient",
+        "vibration": "vibration",
+        "action": "action",
+        "outcome_success": "outcome_success",
+        "fault_family": "fault_family"
+      }
+    },
+    "study": {
+      "enabled": true,
+      "llm": false,
+      "llm_model": "HuggingFaceTB/SmolLM2-135M-Instruct"
+    },
+    "tenant_id": "default"
   },
-  "data": {
-   "path": "data/episodes.csv"
+  "columns": {
+    "episode_id": "unique id",
+    "asset": "machine id (splits never share one)",
+    "alarm": "alarm code",
+    "flow": "coolant flow",
+    "temp": "spindle temp",
+    "ambient": "ambient temp",
+    "vibration": "vibration",
+    "action": "what the engineer did",
+    "outcome_success": "true if the alarm cleared",
+    "fault_family": "root cause recorded after repair (slice column)"
   },
-  "outcome": {
-   "type": "replay",
-   "k": 15
-  },
-  "synth": {
-   "type": "resample"
-  },
-  "backend": {
-   "type": "tabular"
-  },
-  "budget": {
-   "max_compute": 900,
-   "max_rounds": 4
-  },
-  "unit_cost_usd": 0.02
- },
- "columns": {
-  "episode_id": "unique id",
-  "asset": "machine id (splits never share one)",
-  "alarm": "alarm code",
-  "flow": "coolant flow",
-  "temp": "spindle temp",
-  "ambient": "ambient temp",
-  "vibration": "vibration",
-  "action": "what the engineer did",
-  "outcome_success": "true if the alarm cleared",
-  "fault_family": "root cause recorded after repair (slice column)"
- },
- "example_rows": [
-  {
-   "episode_id": "e1",
-   "asset": "CNC-001",
-   "alarm": "E214",
-   "flow": 4.2,
-   "temp": 88,
-   "ambient": 22,
-   "vibration": 1.1,
-   "action": "replace_filter",
-   "outcome_success": true,
-   "fault_family": "filter"
-  },
-  {
-   "episode_id": "e2",
-   "asset": "CNC-002",
-   "alarm": "E214",
-   "flow": 4.0,
-   "temp": 91,
-   "ambient": 34,
-   "vibration": 1.3,
-   "action": "replace_filter",
-   "outcome_success": false,
-   "fault_family": "pump"
-  },
-  {
-   "episode_id": "e3",
-   "asset": "CNC-002",
-   "alarm": "E214",
-   "flow": 4.1,
-   "temp": 92,
-   "ambient": 35,
-   "vibration": 1.2,
-   "action": "inspect_pump",
-   "outcome_success": true,
-   "fault_family": "pump"
-  },
-  {
-   "episode_id": "e4",
-   "asset": "CNC-003",
-   "alarm": "E330",
-   "flow": 9.0,
-   "temp": 70,
-   "ambient": 21,
-   "vibration": 6.2,
-   "action": "replace_bearing",
-   "outcome_success": true,
-   "fault_family": "bearing"
-  }
- ]
+  "example_rows": [
+    {
+      "episode_id": "e1",
+      "asset": "CNC-001",
+      "alarm": "E214",
+      "flow": 4.2,
+      "temp": 88,
+      "ambient": 22,
+      "vibration": 1.1,
+      "action": "replace_filter",
+      "outcome_success": true,
+      "fault_family": "filter"
+    },
+    {
+      "episode_id": "e2",
+      "asset": "CNC-002",
+      "alarm": "E214",
+      "flow": 4.0,
+      "temp": 91,
+      "ambient": 34,
+      "vibration": 1.3,
+      "action": "replace_filter",
+      "outcome_success": false,
+      "fault_family": "pump"
+    },
+    {
+      "episode_id": "e3",
+      "asset": "CNC-002",
+      "alarm": "E214",
+      "flow": 4.1,
+      "temp": 92,
+      "ambient": 35,
+      "vibration": 1.2,
+      "action": "inspect_pump",
+      "outcome_success": true,
+      "fault_family": "pump"
+    },
+    {
+      "episode_id": "e4",
+      "asset": "CNC-003",
+      "alarm": "E330",
+      "flow": 9.0,
+      "temp": 70,
+      "ambient": 21,
+      "vibration": 6.2,
+      "action": "replace_bearing",
+      "outcome_success": true,
+      "fault_family": "bearing"
+    }
+  ]
 }

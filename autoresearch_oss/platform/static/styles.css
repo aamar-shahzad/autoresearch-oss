@@ -1,0 +1,56 @@
+:root {
+  --bg: #0f1419;
+  --panel: #1a2332;
+  --text: #e7ecf3;
+  --muted: #8b9cb3;
+  --accent: #3d8bfd;
+  --ok: #3dd68c;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 1.5rem 2rem 3rem;
+  line-height: 1.45;
+}
+header { margin-bottom: 1.5rem; }
+h1 { margin: 0 0 0.25rem; font-size: 1.5rem; }
+.sub { color: var(--muted); margin: 0; }
+.panel {
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+.panel h2 { margin: 0 0 0.75rem; font-size: 1rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; }
+input { background: var(--bg); border: 1px solid #334; color: var(--text); padding: 0.35rem 0.5rem; border-radius: 4px; max-width: 100%; }
+button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+}
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+button.promote { background: var(--ok); color: #062; font-weight: 600; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid #2a3548; }
+pre { background: var(--bg); padding: 0.75rem; border-radius: 4px; overflow: auto; font-size: 0.8rem; max-height: 240px; }
+pre.muted { color: var(--muted); max-height: 120px; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; margin-bottom: 0.5rem; }
+.row label { display: inline-flex; align-items: center; gap: 0.35rem; margin: 0; }
+.hint { font-size: 0.85rem; color: var(--muted); margin: 0 0 0.75rem; }
+.grid-predict {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.grid-predict label { margin: 0; }
+select { background: var(--bg); border: 1px solid #334; color: var(--text); padding: 0.35rem 0.5rem; border-radius: 4px; }

@@ -1,6 +1,7 @@
 """The 'Fine-Tuning Ontology': a versioned, lineage-tracked registry of the
 three asset classes in the paper -- datasets, techniques/recipes, models --
 plus experiments. Backed by SQLite so it is a single portable file you own."""
+
 from __future__ import annotations
 
 import json
@@ -15,20 +16,31 @@ import numpy as np
 @dataclass
 class Workflow:
     """Step 1 of the paper: fix inputs, outputs and the rule for 'correct'."""
+
     name: str
     description: str
     inputs: list
-    outcome_fields: list          # measured AFTER the action; never model inputs
+    outcome_fields: list  # measured AFTER the action; never model inputs
     action_space: list
     unsafe_actions: list
-    slice_by: str                 # column used for per-slice (failure-mode) analysis
-    thresholds: dict              # metric -> [op, value]
-    slice_values: list = field(default_factory=list)  # every slice that MUST be evaluated
-    group_by: str = "asset"                           # splits never share a group (e.g. machine)
-    costly_actions: list = field(default_factory=list)  # expensive actions; wrong ones are tracked
-    task_type: str = "choice"          # choice: pick from action_space | generation: free text + verifier
-    prompt_template: str = ""          # e.g. "Ticket: {subject}\n{body}"; default renders inputs as key=value
-    unsafe_patterns: list = field(default_factory=list)  # regexes a generated answer must never match
+    slice_by: str  # column used for per-slice (failure-mode) analysis
+    thresholds: dict  # metric -> [op, value]
+    slice_values: list = field(
+        default_factory=list
+    )  # every slice that MUST be evaluated
+    group_by: str = "asset"  # splits never share a group (e.g. machine)
+    costly_actions: list = field(
+        default_factory=list
+    )  # expensive actions; wrong ones are tracked
+    task_type: str = (
+        "choice"  # choice: pick from action_space | generation: free text + verifier
+    )
+    prompt_template: str = (
+        ""  # e.g. "Ticket: {subject}\n{body}"; default renders inputs as key=value
+    )
+    unsafe_patterns: list = field(
+        default_factory=list
+    )  # regexes a generated answer must never match
 
     @classmethod
     def from_dict(cls, d: dict) -> "Workflow":
@@ -44,7 +56,9 @@ class Workflow:
             raise ValueError("choice workflows need an action_space")
         leaked = set(self.inputs) & set(self.outcome_fields)
         if leaked:
-            raise ValueError(f"Leakage: outcome fields used as inputs: {sorted(leaked)}")
+            raise ValueError(
+                f"Leakage: outcome fields used as inputs: {sorted(leaked)}"
+            )
 
 
 def _clean(o: Any):
@@ -65,24 +79,59 @@ class Registry:
     """Generic artifact store. kinds: workflow, dataset, evalset, episodes,
     recipe, experiment, model."""
 
-    def __init__(self, path: str = ":memory:"):
-        self.db = sqlite3.connect(path)
+    def __init__(self, path: str = ":memory:", tenant_id: str = "default"):
+        # FastAPI runs sync handlers in a thread pool; allow cross-thread use.
+        self.db = sqlite3.connect(path, check_same_thread=False)
+        self.tenant_id = tenant_id
         self.db.execute(
             "CREATE TABLE IF NOT EXISTS artifacts(id TEXT PRIMARY KEY, kind TEXT, name TEXT,"
-            " version INT, parents TEXT, payload TEXT, created REAL)"
+            " version INT, parents TEXT, payload TEXT, created REAL, tenant_id TEXT DEFAULT 'default')"
         )
+        self.db.execute(
+            "CREATE TABLE IF NOT EXISTS audit_log("
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL, tenant_id TEXT, actor TEXT, action TEXT, detail TEXT)"
+        )
+        self._migrate_artifacts_tenant()
         self.db.commit()
 
-    def put(self, kind: str, name: str, payload: dict, parents=()) -> str:
+    def _migrate_artifacts_tenant(self):
+        cols = {
+            r[1] for r in self.db.execute("PRAGMA table_info(artifacts)").fetchall()
+        }
+        if "tenant_id" not in cols:
+            self.db.execute(
+                "ALTER TABLE artifacts ADD COLUMN tenant_id TEXT DEFAULT 'default'"
+            )
+
+    def put(
+        self,
+        kind: str,
+        name: str,
+        payload: dict,
+        parents=(),
+        tenant_id: str | None = None,
+    ) -> str:
+        tid = tenant_id or self.tenant_id
+        payload = dict(payload)
+        payload.setdefault("_tenant_id", tid)
         n = self.db.execute(
-            "SELECT COUNT(*) FROM artifacts WHERE kind=? AND name=?", (kind, name)
+            "SELECT COUNT(*) FROM artifacts WHERE kind=? AND name=? AND tenant_id=?",
+            (kind, name, tid),
         ).fetchone()[0]
         version = n + 1
         aid = f"{kind}/{name}@v{version}"
         self.db.execute(
-            "INSERT INTO artifacts VALUES (?,?,?,?,?,?,?)",
-            (aid, kind, name, version, json.dumps(list(parents)),
-             json.dumps(_clean(payload)), time.time()),
+            "INSERT INTO artifacts VALUES (?,?,?,?,?,?,?,?)",
+            (
+                aid,
+                kind,
+                name,
+                version,
+                json.dumps(list(parents)),
+                json.dumps(_clean(payload)),
+                time.time(),
+                tid,
+            ),
         )
         self.db.commit()
         return aid
@@ -91,19 +140,34 @@ class Registry:
         r = self.db.execute("SELECT * FROM artifacts WHERE id=?", (aid,)).fetchone()
         if not r:
             raise KeyError(aid)
-        return {"id": r[0], "kind": r[1], "name": r[2], "version": r[3],
-                "parents": json.loads(r[4]), "payload": json.loads(r[5]), "created": r[6]}
+        return {
+            "id": r[0],
+            "kind": r[1],
+            "name": r[2],
+            "version": r[3],
+            "parents": json.loads(r[4]),
+            "payload": json.loads(r[5]),
+            "created": r[6],
+        }
 
     def update(self, aid: str, patch: dict) -> None:
         cur = self.get(aid)["payload"]
         cur.update(_clean(patch))
-        self.db.execute("UPDATE artifacts SET payload=? WHERE id=?", (json.dumps(cur), aid))
+        self.db.execute(
+            "UPDATE artifacts SET payload=? WHERE id=?", (json.dumps(cur), aid)
+        )
         self.db.commit()
 
-    def list(self, kind: str) -> list:
-        rows = self.db.execute(
-            "SELECT id FROM artifacts WHERE kind=? ORDER BY rowid", (kind,)
-        ).fetchall()
+    def list(self, kind: str, *, all_tenants: bool = False) -> list:
+        if all_tenants or self.tenant_id == "*":
+            rows = self.db.execute(
+                "SELECT id FROM artifacts WHERE kind=? ORDER BY rowid", (kind,)
+            ).fetchall()
+        else:
+            rows = self.db.execute(
+                "SELECT id FROM artifacts WHERE kind=? AND tenant_id=? ORDER BY rowid",
+                (kind, self.tenant_id),
+            ).fetchall()
         return [self.get(r[0]) for r in rows]
 
     def lineage(self, aid: str) -> list:
@@ -119,4 +183,7 @@ class Registry:
         return out
 
     def export(self) -> list:
-        return [self.get(r[0]) for r in self.db.execute("SELECT id FROM artifacts ORDER BY rowid")]
+        return [
+            self.get(r[0])
+            for r in self.db.execute("SELECT id FROM artifacts ORDER BY rowid")
+        ]

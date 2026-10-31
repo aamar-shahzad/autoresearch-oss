@@ -29,7 +29,21 @@ def build_parts(cfg: dict):
 def build(cfg: dict, db: str, out: str, log=print):
     wf, outcome, synth, backend = build_parts(cfg)
     episodes = load_episodes(cfg["data"], wf)
-    ar = AutoResearch(Registry(db), wf, episodes, outcome, backend, synth, techniques=cfg.get("techniques"),
-                      budget=Budget(**cfg.get("budget", {})), seed=cfg.get("seed", 0), artifacts_dir=out, log=log,
-                      generic_synth=cfg.get("generic_synth", False), unit_cost_usd=cfg.get("unit_cost_usd", 0.0))
+    tenant = cfg.get("tenant_id", "default")
+    ar = AutoResearch(
+        Registry(db, tenant_id=tenant),
+        wf,
+        episodes,
+        outcome,
+        backend,
+        synth,
+        techniques=cfg.get("techniques"),
+        budget=Budget(**cfg.get("budget", {})),
+        seed=cfg.get("seed", 0),
+        artifacts_dir=out,
+        log=log,
+        generic_synth=cfg.get("generic_synth", False),
+        unit_cost_usd=cfg.get("unit_cost_usd", 0.0),
+        study=cfg.get("study"),
+    )
     return ar, episodes, wf

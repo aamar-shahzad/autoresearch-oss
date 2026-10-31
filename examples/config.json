@@ -57,7 +57,7 @@
   "unsafe_patterns": []
  },
  "data": {
-  "path": "/home/claude/autoresearch-oss/examples/episodes.csv"
+  "path": "/Users/aamar/Downloads/autoresearch-oss/examples/episodes.csv"
  },
  "outcome": {
   "type": "replay",

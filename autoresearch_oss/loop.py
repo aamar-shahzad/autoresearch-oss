@@ -69,12 +69,13 @@ class AutoResearch:
     def __init__(self, registry, workflow, episodes, outcome_fn, backend, synth_fn,
                  techniques=None, budget: Budget | None = None, seed: int = 0,
                  artifacts_dir: str = "artifacts", log=print, generic_synth: bool = False,
-                 unit_cost_usd: float = 0.0):
+                 unit_cost_usd: float = 0.0, study: dict | None = None):
         self.reg, self.wf, self.episodes = registry, workflow, episodes
         self.outcome_fn, self.backend, self.synth_fn = outcome_fn, backend, synth_fn
         self.budget, self.seed, self.log = budget or Budget(), seed, log
         self.artifacts_dir, self.generic_synth = artifacts_dir, generic_synth
         self.unit_cost_usd = unit_cost_usd
+        self.study = study or {}
         os.makedirs(artifacts_dir, exist_ok=True)
         traits = {"single_correct_trace": True, "has_failures": True,
                   "verifiable_reward": bool(getattr(outcome_fn, "verifiable", False))}
@@ -219,6 +220,24 @@ class AutoResearch:
         self.prepare(extra_episodes)
         self.spent, self.seen, results = 0.0, set(), []
         cands = self.initial_candidates()
+        if self.study.get("enabled", True):
+            from .studies import propose_study_recipes
+
+            extra, digest = propose_study_recipes(
+                self.reg,
+                self.wf,
+                self.backend,
+                self.techniques,
+                use_llm=bool(self.study.get("llm")),
+                llm_model=self.study.get(
+                    "llm_model", "HuggingFaceTB/SmolLM2-135M-Instruct"
+                ),
+            )
+            if extra:
+                self.log(
+                    f"study: {len(extra)} recipe(s) from {digest.get('count', 0)} prior experiments"
+                )
+                cands.extend(extra)
         self.seen |= {c.key() for c in cands}
         self.log(f"AutoResearch: {len(cands)} initial recipes, budget {self.budget.max_compute} units")
 

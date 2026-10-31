@@ -15,6 +15,9 @@ config.json ─► connectors ─► quality ─► splits(by group) ─► mixt
                                               ▲                         │
                               monitor (drift) ┴── ingest-live ◄────────┘
 ```
+
 Principles: every recipe is written before it runs; the holdout is touched only by candidates that already pass
 validation (and counted); a slice that cannot be measured blocks promotion; synthetic rows are always flagged and never
 in the holdout; estimates (offline replay, memory plans) are labelled as estimates.
+
+**Platform evolution:** multi-repo roadmap (API, ontology-lite, UI, connectors, RBAC) — [platform-roadmap.md](platform-roadmap.md).
